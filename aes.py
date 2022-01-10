@@ -16,17 +16,21 @@ def ECB_encrypt(data, key):
     cipher = AES.new(key, AES.MODE_ECB)
     return cipher.encrypt(data)
 
+
 def ECB_decrypt(encrypted, key):
     decipher = AES.new(key, AES.MODE_ECB)
     return decipher.decrypt(encrypted)
+
 
 def CBC_encrypt(data, key, iv):
     cipher = AES.new(key, AES.MODE_CBC, iv)
     return cipher.encrypt(data)
 
+
 def CBC_decrypt(data, key, iv):
     decipher = AES.new(key, AES.MODE_CBC, iv)
     return decipher.decrypt(data)
+
 
 def main():
     # pad the plaintext.
@@ -50,7 +54,7 @@ def main():
     print 'key:', key.encode('hex'), '\nkey length:', len(key)
     print 'encrypted message:', ecb_encrypted.encode('hex')
     print 'decrypted message:', unpad(ecb_decrypted, 16)
-    print '-'*30
+    print '-' * 30
     # CBC results.
     print 'CBC RESULTS:'
     print 'key:', key.encode('hex'), '\nkey length:', len(key)
