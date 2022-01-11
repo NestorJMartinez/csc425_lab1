@@ -50,17 +50,17 @@ def main():
     cbc_decrypted = CBC_decrypt(cbc_encrypted, key, iv)
 
     # ECB results.
-    print 'ECB RESULTS:'
-    print 'key:', key.encode('hex'), '\nkey length:', len(key)
-    print 'encrypted message:', ecb_encrypted.encode('hex')
-    print 'decrypted message:', unpad(ecb_decrypted, 16)
-    print '-' * 30
+    print('ECB RESULTS:')
+    print('key:', key.encode('hex'), '\nkey length:', len(key))
+    print('encrypted message:', ecb_encrypted.encode('hex'))
+    print('decrypted message:', unpad(ecb_decrypted, 16))
+    print('-' * 30)
     # CBC results.
-    print 'CBC RESULTS:'
-    print 'key:', key.encode('hex'), '\nkey length:', len(key)
-    print 'iv:', iv.encode('hex'), '\niv length:', len(iv)
-    print 'encrypted message:', cbc_encrypted.encode('hex')
-    print 'decrypted message:', unpad(cbc_decrypted, 16)
+    print('CBC RESULTS:')
+    print('key:', key.encode('hex'), '\nkey length:', len(key))
+    print('iv:', iv.encode('hex'), '\niv length:', len(iv))
+    print('encrypted message:', cbc_encrypted.encode('hex'))
+    print('decrypted message:', unpad(cbc_decrypted, 16))
 
 
 if __name__ == "__main__":
