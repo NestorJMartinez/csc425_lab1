@@ -6,7 +6,7 @@ KEY = b'\xff' * 16                         # ^
 # The basis of this attack, this lets us add a message to the plaintext and recieve the ciphertext
 def encryptWithPrefix(prefix):
     alteredText = prefix + TEXT
-    return aes.ECB_encrypt(aes.pad(prefix + TEXT), KEY)
+    return aes.ecb_encrypt(aes.pad(prefix + TEXT), KEY)
 
 # Calls the encryption oracle with extra characters until a new block appears, 
 # this reveals the actual message size without padding
@@ -24,12 +24,13 @@ def findMessageLength():
 # returns the ascii value of thefirst character of the last block once it is found
 def bruteForceSingle(prefix, knownSuffix, block):
     # contains the correct encryption of the block
-    t = len(encryptWithPrefix(prefix))
+    t = encryptWithPrefix(prefix)[-32:-16]
     if block == -1: actual = encryptWithPrefix(prefix)[-16:]
     else: actual = encryptWithPrefix(prefix)[16 * block : 16 * (block + 1)]
     t2 = len(actual)
     curByte = 0
-    check = encryptWithPrefix(chr(curByte)+knownSuffix)[:16]
+    text = chr(curByte)+knownSuffix
+    check = encryptWithPrefix(text)[:16]
     while actual != check and curByte < 255:
         curByte += 1
         check = encryptWithPrefix(chr(curByte)+knownSuffix)[:16]
@@ -47,8 +48,24 @@ def breakPaddedBlock(prefixLen):
         if byte == -1: 
             exit()
         plaintext = chr(byte) + plaintext
+        print("Partial: " + plaintext)
         padLen -= 1
         prefixLen = (prefixLen + 1) % 16
+    return plaintext
+
+# uses bruteForceSingle to crack a block using a partial plaintext
+def breakUnpaddedBlock(plaintext, block, messageLen):
+    prefixLen = 15
+    for i in range(16):
+        prefix = 'x' * prefixLen
+        suffix = plaintext[:15]
+        byte  = bruteForceSingle(prefix, suffix, block)
+        if byte == -1: 
+            exit()
+        plaintext = chr(byte) + plaintext
+        print("Partial: " + plaintext)
+        prefixLen = (prefixLen + 1) % 16
+        if len(plaintext) == messageLen: break
     return plaintext
 
 def main():
@@ -56,17 +73,12 @@ def main():
     messageLength = findMessageLength()
     prefixLen = (17 - (messageLength % 16)) % 16
     plaintext = breakPaddedBlock(prefixLen)
-    # need to compare using the first 15 chars of the plaintext and keep track of which block 
+    block = -2
+    # loops through the remaining blocks and decrypts using a partial plaintext
     while len(plaintext) < messageLength:
-        block = -2
-        prefix = 'x' * prefixLen
-        suffix = plaintext[:15]
-        byte  = bruteForceSingle(prefix, suffix, block)
-        if byte == -1: 
-            exit()
-        plaintext = chr(byte) + plaintext
-        prefixLen = (prefixLen + 1) % 16
-    return
+        plaintext = breakUnpaddedBlock(plaintext, block, messageLength)
+        block -= 1
+    print("Final: " + plaintext)
 
 if __name__ == "__main__":
     main()
