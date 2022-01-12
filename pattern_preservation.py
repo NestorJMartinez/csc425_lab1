@@ -1,6 +1,5 @@
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-from Crypto.Util.Padding import unpad
 
 
 def pad(data):
@@ -62,7 +61,7 @@ def ctr_decrypt(data, key, nonce):
 
 def main():
     # pad the plaintext.
-    text = 'this is the wireless security lab'
+    text = 'wireless lab425 wireless lab425 '
     padded_text = pad(text)
 
     # get key & iv. 16 bytes == 128 bits.
@@ -71,55 +70,34 @@ def main():
 
     # ECB encryption & decryption.
     ecb_encrypted = ecb_encrypt(padded_text, key)
-    ecb_decrypted = ecb_decrypt(ecb_encrypted, key)
+    print '\npattern preservation for ecb:'
+    print ecb_encrypted[0:16]
+    print ecb_encrypted[16:32]
 
     # CBC encryption & decryption.
     cbc_encrypted = cbc_encrypt(padded_text, key, iv)
-    cbc_decrypted = cbc_decrypt(cbc_encrypted, key, iv)
+    print '\npattern preservation for cbc:'
+    print cbc_encrypted[0:16]
+    print cbc_encrypted[16:32]
 
     # CFB encryption & decryption.
     cfb_encrypted = cfb_encrypt(text, key, iv)
-    cfb_decrypted = cfb_decrypt(cfb_encrypted, key, iv)
+    print '\npattern preservation for cfb:'
+    print cfb_encrypted[0:16]
+    print cfb_encrypted[16:32]
 
     # OFB encryption & decryption.
     ofb_encrypted = ofb_encrypt(text, key, iv)
-    ofb_decrypted = ofb_decrypt(ofb_encrypted, key, iv)
+    print '\npattern preservation for ofb:'
+    print ofb_encrypted[0:16]
+    print ofb_encrypted[16:32]
 
-    # OFB encryption & decryption.
+    # CTR encryption & decryption.
     nonce = AES.new(key, AES.MODE_CTR).nonce
     ctr_encrypted = ctr_encrypt(text, key, nonce)
-    ctr_decrypted = ctr_decrypt(ctr_encrypted, key, nonce)
-
-    print '-' * 30
-    print 'text:', text, '\ntext length:', len(text)
-    print 'key:', key.encode('hex'), '\nkey length:', len(key)
-    print 'iv:', iv.encode('hex'), '\niv length:', len(iv)
-    print 'nonce:', nonce.encode('hex'), 'nonce length:', len(nonce)
-    print '-' * 30
-    # ECB results.
-    print 'ECB RESULTS:'
-    print 'encrypted message:', ecb_encrypted.encode('hex')
-    print 'decrypted message:', unpad(ecb_decrypted, 16)
-    # CBC results.
-    print 'CBC RESULTS:'
-    print 'encrypted message:', cbc_encrypted.encode('hex')
-    print 'decrypted message:', unpad(cbc_decrypted, 16)
-    print '-' * 30
-    # CFB results.
-    print 'CFB RESULTS:'
-    print 'encrypted message:', cfb_encrypted.encode('hex')
-    print 'decrypted message:', cfb_decrypted
-    print '-' * 30
-    # OFB results.
-    print 'OFB RESULTS:'
-    print 'encrypted message:', ofb_encrypted.encode('hex')
-    print 'decrypted message:', ofb_decrypted
-    print '-' * 30
-    # CTR results.
-    print 'CTR RESULTS:'
-    print 'encrypted message:', ctr_encrypted.encode('hex')
-    print 'decrypted message:', ctr_decrypted
-    print '-' * 30
+    print '\npattern preservation for ctr:'
+    print ofb_encrypted[0:16]
+    print ofb_encrypted[16:32]
 
 
 if __name__ == "__main__":
