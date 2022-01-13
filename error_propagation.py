@@ -16,7 +16,7 @@ def ctr_prop(plaintext):
     decrypted2 = decrypt2.decrypt(ciphertext2)
     print('CTR')
     print('Original: ' + str(decrypted1))
-    print('Error:    ' + str(decrypted2), end='\n\n')
+    print('Error:    ' + str(decrypted2))
 
 
 def ofb_prop(plaintext):
@@ -33,7 +33,7 @@ def ofb_prop(plaintext):
     decrypted2 = decrypt2.decrypt(ciphertext2)
     print('OFB')
     print('Original: ' + str(decrypted1))
-    print('Error:    ' + str(decrypted2), end='\n\n')
+    print('Error:    ' + str(decrypted2))
 
 
 def cfb_prop(plaintext):
@@ -50,7 +50,7 @@ def cfb_prop(plaintext):
     decrypted2 = decrypt2.decrypt(ciphertext2)
     print('CFB')
     print('Original: ' + str(decrypted1))
-    print('Error:    ' + str(decrypted2), end='\n\n')
+    print('Error:    ' + str(decrypted2))
 
 
 def cbc_prop(plaintext):
@@ -67,7 +67,7 @@ def cbc_prop(plaintext):
     decrypted2 = decrypt2.decrypt(ciphertext2)
     print('CBC')
     print('Original: ' + str(decrypted1))
-    print('Error:    ' + str(decrypted2), end='\n\n')
+    print('Error:    ' + str(decrypted2))
 
 
 def ecb_prop(plaintext):
@@ -86,7 +86,7 @@ def ecb_prop(plaintext):
     decrypted2 = decrypt2.decrypt(ciphertext2)
     print('ECB')
     print('Original: ' + str(decrypted1))
-    print('Error:    ' + str(decrypted2), end='\n\n')
+    print('Error:    ' + str(decrypted2))
 
 
 if __name__ == '__main__':

@@ -1,13 +1,13 @@
 from Crypto.Cipher import AES
 from Crypto.Random import get_random_bytes
-from Crypto.Util.Padding import unpad
+from Crypto.Util.Padding import unpad, pad
 
 
-def pad(data):
-    pad_bytes = 16 - (len(data) % 16)
-    for i in range(0, pad_bytes):
-        data = data + chr(pad_bytes)
-    return data
+# def pad(data):
+#     pad_bytes = 16 - (len(data) % 16)
+#     for i in range(0, pad_bytes):
+#         data = data + chr(pad_bytes)
+#     return data
 
 
 def ecb_encrypt(data, key):
@@ -63,7 +63,7 @@ def ctr_decrypt(data, key, nonce):
 def main():
     # pad the plaintext.
     text = 'this is the wireless security lab'
-    padded_text = pad(text)
+    padded_text = pad(text, 16)
 
     # get key & iv. 16 bytes == 128 bits.
     key = get_random_bytes(16)
@@ -89,35 +89,34 @@ def main():
     nonce = AES.new(key, AES.MODE_CTR).nonce
     ctr_encrypted = ctr_encrypt(text, key, nonce)
     ctr_decrypted = ctr_decrypt(ctr_encrypted, key, nonce)
-
     print '-' * 30
     print 'text:', text, '\ntext length:', len(text)
-    print 'key:', key.encode('hex'), '\nkey length:', len(key)
-    print 'iv:', iv.encode('hex'), '\niv length:', len(iv)
-    print 'nonce:', nonce.encode('hex'), 'nonce length:', len(nonce)
+    print 'key:', key, '\nkey length:', len(key)
+    print 'iv:', iv, '\niv length:', len(iv)
+    print 'nonce:', nonce, 'nonce length:', len(nonce)
     print '-' * 30
     # ECB results.
     print 'ECB RESULTS:'
-    print 'encrypted message:', ecb_encrypted.encode('hex')
+    print 'encrypted message:', ecb_encrypted
     print 'decrypted message:', unpad(ecb_decrypted, 16)
     # CBC results.
     print 'CBC RESULTS:'
-    print 'encrypted message:', cbc_encrypted.encode('hex')
+    print 'encrypted message:', cbc_encrypted
     print 'decrypted message:', unpad(cbc_decrypted, 16)
     print '-' * 30
     # CFB results.
     print 'CFB RESULTS:'
-    print 'encrypted message:', cfb_encrypted.encode('hex')
+    print 'encrypted message:', cfb_encrypted
     print 'decrypted message:', cfb_decrypted
     print '-' * 30
     # OFB results.
     print 'OFB RESULTS:'
-    print 'encrypted message:', ofb_encrypted.encode('hex')
+    print 'encrypted message:', ofb_encrypted
     print 'decrypted message:', ofb_decrypted
     print '-' * 30
     # CTR results.
     print 'CTR RESULTS:'
-    print 'encrypted message:', ctr_encrypted.encode('hex')
+    print 'encrypted message:', ctr_encrypted
     print 'decrypted message:', ctr_decrypted
     print '-' * 30
 
